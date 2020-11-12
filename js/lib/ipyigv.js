@@ -55,7 +55,7 @@ var IgvModel = widgets.DOMWidgetModel.extend({
 var ReferenceGenomeView = widgets.WidgetView.extend({
   render: function() {
     console.log("rendering ReferenceGenomeView")
-    // this.listenTo(this.model, 'change:tracks', this.update_tracks, this)
+    this.listenTo(this.model, 'change:tracks', this.update_tracks, this)
   },
   update_tracks: function() {
     console.log('Updating tracks with '+ this.model.get('tracks'))
@@ -88,13 +88,20 @@ var IgvBrowser = widgets.DOMWidgetView.extend({
 
       this.el.appendChild(this.igvDiv)
       this.listenTo(this.model, 'change:reference', this.update_reference, this)
+      this.listenTo(this.model.get('reference'), 'change:tracks', this.update_tracks, this)
+
       //this.model.on('change:genome', this.update_genome, this)
     },
 
     update_reference: function() {
-      console.log('Updating options["reference"] with '+ this.model.get('reference'))
+      console.log('Updating browser.reference with ', this.model.get('reference'))
       //this.browser.loadGenome({"id": this.model.get('genome')})
     },
+    update_tracks: function() {
+      console.log('Updating tracks with ',  this.model.get('reference').get('tracks'))
+      //this.browser.loadGenome({"id": this.model.get('genome')})
+    },
+
 });
 
 

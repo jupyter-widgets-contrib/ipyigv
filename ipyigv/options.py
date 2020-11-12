@@ -223,8 +223,8 @@ class ReferenceGenome(Widget):
     headers = Dict().tag(sync=True)
     wholeGenomeView = Bool(default_value=True).tag(sync=True)
 
-    def addTrack(self, track):
-        self.tracks.append(track)
+    def add_track(self, track):
+        self.tracks = self.tracks[:] + [track]
 
 
 # class SearchService(Widget):
