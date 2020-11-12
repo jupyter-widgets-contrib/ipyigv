@@ -1,0 +1,6 @@
+recursive-include ipyigv/static *.*
+include ipyigv.json
+
+include LICENSE
+include setup.py
+include pyproject.toml
