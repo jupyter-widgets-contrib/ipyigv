@@ -78,16 +78,16 @@ var IgvBrowser = widgets.DOMWidgetView.extend({
       // console.log('model', this.model)
       reference = this.model.get('reference')
       var options =  {reference: this.model.get('reference')} // { "genome": this.model.get('genome') };
-      igv.createBrowser(this.igvDiv, options)
+      this.browser = igv.createBrowser(this.igvDiv, options)
         .then(function (browser) {
             console.log("Created IGV browser with options ", options);
-            that.browser = browser
-            that.browser.on('trackremoved', that.track_removed)
-            that.browser.on('trackdragend', that.track_dragged)
+            browser.on('trackremoved', that.track_removed);
+            browser.on('trackdragend', that.track_dragged);
 
-            that.browser.on('locuschange', that.locus_changed)
-            that.browser.on('trackclick', that.track_clicked)
-          })
+            browser.on('locuschange', that.locus_changed);
+            browser.on('trackclick', that.track_clicked);
+            return browser;
+          });
 
       this.el.appendChild(this.igvDiv)
 
@@ -106,12 +106,9 @@ var IgvBrowser = widgets.DOMWidgetView.extend({
     update_reference: function() {
       reference = this.model.get('reference')
       console.log('Updating browser reference with ', reference)
-      if (this.browser) {
-        this.browser.loadGenome(reference)
-      }
-      else {
-        console.log ("WARNING: Can't load a genome before the browser is initialized.")
-      }
+      this.browser.then(function (b) {
+        b.loadGenome(reference)
+      });
     },
 
     update_tracks: function() {
@@ -126,28 +123,34 @@ var IgvBrowser = widgets.DOMWidgetView.extend({
       //this.browser.loadGenome({"id": this.model.get('genome')})
     },
 
-    add_track_view: function(child) {
-      console.log('add_track_view with child :', child)
-      if (!this.tracks_initialized) {
-        console.log("track_view not yet initialized, skipping");
-        return
-      }
-      this.browser.loadTrack(child.attributes)
-          .then(function (newTrack) {
-              console.log("new track loaded in browser: " + newTrack.name)
-            })
-          .catch(function(error) {
-            console.log("error loading Track: ", error)
-          })
+    add_track_view: function(child_model) {
+      var that = this;
+      return this.create_child_view(child_model, {}).then(function (view) {
+          console.log('add_track_view with child :', child_model)
+          if (!this.tracks_initialized) {
+              return that.browser.then(function (b) {
+                  return b.loadTrack(child_model.attributes).then(function (newTrack) {
+                      console.log("new track loaded in browser: " + newTrack.name);
+                      return view;
+                  });
+            });
+          } else {
+              console.log("track_view not yet initialized, skipping");
+              return view;
+          }
+      });
     },
 
-    remove_track_view: function(child) {
-      console.log('removing Track from genome', child)
+    remove_track_view: function(child_view) {
+      console.log('removing Track from genome', child_view);
+      var that = this;
       if (!this.tracks_initialized) {
         console.log("track_view not yet initialized, skipping");
-        return
+        return;
       }
-      //this.browser.removeTrack(child)
+      that.browser.then(function(b) {
+          b.removeTrackByName(child_view.model.get("name"));
+      });
     },
 
     track_removed: function(tracks) {
