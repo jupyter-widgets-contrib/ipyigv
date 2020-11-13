@@ -14,40 +14,7 @@ from ipywidgets.widgets import widget
 
 from .utils import widget_serialization_no_none
 
-class Mutable(TraitType):
-    """A base class for mutable traits using Spectate"""
 
-    _model_type = None
-    _event_type = "change"
-
-    def instance_init(self, obj):
-        default = self._model_type()
-
-        @mvc.view(default)
-        def callback(default, events):
-            change = dict(
-                new=getattr(obj, self.name),
-                name=self.name,
-                type=self._event_type,
-            )
-            obj.notify_change(change)
-
-        setattr(obj, self.name, default)
-
-class MutableDict(Mutable):
-    """A mutable dictionary trait"""
-    _model_type = mvc.Dict
-
-class MutableList(Mutable):
-    """A mutable list trait"""
-    _model_type = mvc.List
-
-
-
-
-class FieldColors(Widget):
-    field = Unicode()
-    palette = Dict(key_trait=Unicode, value_trait=Instance(Color))
 
 # NB '.txt' considered annotation as it is used in the public genomes. But not as per the doc.
 TRACK_FILE_TYPES = { \
@@ -60,6 +27,11 @@ TRACK_FILE_TYPES = { \
         'variant': ['.vcf'],
         'seg': ['.seg']
         }
+
+
+class FieldColors(HasTraits):
+    field = Unicode()
+    palette = Dict(key_trait=Unicode, value_trait=Instance(Color))
 
 
 @register
@@ -80,6 +52,7 @@ class Track(Widget):
     # Version of the front-end module containing widget view
     _view_module_version = Unicode('^0.1.0').tag(sync=True)
     # Version of the front-end module containing widget model
+    _model_module_version = Unicode('^0.1.0').tag(sync=True)
 
 
     def __new__(cls, **kwargs):
@@ -145,6 +118,7 @@ class AnnotationTrack(Track):
     # Version of the front-end module containing widget view
     _view_module_version = Unicode('^0.1.0').tag(sync=True)
     # Version of the front-end module containing widget model
+    _model_module_version = Unicode('^0.1.0').tag(sync=True)
 
 
     displayMode = Unicode(default_value = 'COLLAPSED')
@@ -196,19 +170,16 @@ class ReferenceGenome(Widget):
 
     # Name of the widget view class in front-end
     _view_name = Unicode('ReferenceGenomeView').tag(sync=True)
-
     # Name of the widget model class in front-end
     _model_name = Unicode('ReferenceGenomeModel').tag(sync=True)
-
     # Name of the front-end module containing widget view
     _view_module = Unicode('ipyigv').tag(sync=True)
-
     # Name of the front-end module containing widget model
     _model_module = Unicode('ipyigv').tag(sync=True)
-
     # Version of the front-end module containing widget view
     _view_module_version = Unicode('^0.1.0').tag(sync=True)
     # Version of the front-end module containing widget model
+    _model_module_version = Unicode('^0.1.0').tag(sync=True)
 
 
     id = Unicode(allow_none=True).tag(sync=True)
@@ -225,6 +196,11 @@ class ReferenceGenome(Widget):
 
     def add_track(self, track):
         self.tracks = self.tracks[:] + [track]
+
+    def remove_track(self, track):
+        self.tracks = [t for t in self.tracks if t != track]
+
+
 
 
 # class SearchService(Widget):

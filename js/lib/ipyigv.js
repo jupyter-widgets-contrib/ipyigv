@@ -69,8 +69,10 @@ var IgvBrowser = widgets.DOMWidgetView.extend({
     // Defines how the widget gets rendered into the DOM
 
     tracks_initialized: false,
+    browser: null,
 
     render: function() {
+      var that = this
       console.log("rendering browser")
       this.igvDiv = document.createElement("div");
       // console.log('model', this.model)
@@ -79,7 +81,12 @@ var IgvBrowser = widgets.DOMWidgetView.extend({
       igv.createBrowser(this.igvDiv, options)
         .then(function (browser) {
             console.log("Created IGV browser with options ", options);
-            igv.browser = browser
+            that.browser = browser
+            that.browser.on('trackremoved', that.track_removed)
+            that.browser.on('trackdragend', that.track_dragged)
+
+            that.browser.on('locuschange', that.locus_changed)
+            that.browser.on('trackclick', that.track_clicked)
           })
 
       this.el.appendChild(this.igvDiv)
@@ -92,20 +99,26 @@ var IgvBrowser = widgets.DOMWidgetView.extend({
 
       // IMPORTANT: do this after this.track_views.update(...), or this.update_tracks gets called
       this.listenTo(this.model, 'change:reference', this.update_reference, this)
-      this.listenTo(this.model.get('reference'), 'change:tracks', this.update_tracks, this)
-
+      this.listenTo(this.model.get('reference'), 'change:tracks', this.update_tracks, this.reference)
       //this.model.on('change:genome', this.update_genome, this)
     },
 
     update_reference: function() {
-      console.log('Updating browser.reference with ', this.model.get('reference'))
-      //this.browser.loadGenome({"id": this.model.get('genome')})
+      reference = this.model.get('reference')
+      console.log('Updating browser reference with ', reference)
+      if (this.browser) {
+        this.browser.loadGenome(reference)
+      }
+      else {
+        console.log ("WARNING: Can't load a genome before the browser is initialized.")
+      }
     },
 
     update_tracks: function() {
       if (this.tracks_initialized) {
-        console.log('Updating tracks_views with '+ this.model.get('tracks'))
-        this.track_views.update(this.model.get('reference').get('tracks'))
+        tracks = this.model.get('reference').get('tracks')
+        console.log('Updating tracks_views with ', tracks)
+        this.track_views.update(tracks)
       }
       else {
         console.log ("tracks not yet initialized - skipping")
@@ -119,7 +132,7 @@ var IgvBrowser = widgets.DOMWidgetView.extend({
         console.log("track_view not yet initialized, skipping");
         return
       }
-      igv.browser.loadTrack(child.attributes)
+      this.browser.loadTrack(child.attributes)
           .then(function (newTrack) {
               console.log("new track loaded in browser: " + newTrack.name)
             })
@@ -129,7 +142,28 @@ var IgvBrowser = widgets.DOMWidgetView.extend({
     },
 
     remove_track_view: function(child) {
-      console.log('removing Track to genome', child)
+      console.log('removing Track from genome', child)
+      if (!this.tracks_initialized) {
+        console.log("track_view not yet initialized, skipping");
+        return
+      }
+      //this.browser.removeTrack(child)
+    },
+
+    track_removed: function(tracks) {
+      console.log('track removed', tracks)
+    },
+
+    track_dragged: function(arg) {
+      console.log('track dragged', arg)
+    },
+
+    locus_changed: function(referenceFrame, label) {
+      console.log('locus changed', referenceFrame, label)
+    },
+
+    track_clicked: function (track, popoverData) {
+      console.log('track clicked', track, popoverData)
     }
 });
 
