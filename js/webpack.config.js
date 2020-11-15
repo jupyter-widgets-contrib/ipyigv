@@ -78,5 +78,6 @@ module.exports = [
         optimization: {
             minimize: false
         },
+        mode:'development', 
     }
 ];
