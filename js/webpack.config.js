@@ -22,7 +22,10 @@ module.exports = [
             filename: 'extension.js',
             path: path.resolve(__dirname, '..', 'ipyigv', 'static'),
             libraryTarget: 'amd'
-        }
+        },
+        optimization: {
+            minimize: false
+        },
     },
     {// Bundle for the notebook containing the custom widget views and models
      //
@@ -40,7 +43,11 @@ module.exports = [
         module: {
             rules: rules
         },
-        externals: ['@jupyter-widgets/base']
+        externals: ['@jupyter-widgets/base'],
+        optimization: {
+            minimize: false
+        },
+
     },
     {// Embeddable ipyigv bundle
      //
@@ -67,6 +74,9 @@ module.exports = [
         module: {
             rules: rules
         },
-        externals: ['@jupyter-widgets/base']
+        externals: ['@jupyter-widgets/base'],
+        optimization: {
+            minimize: false
+        },
     }
 ];
