@@ -194,14 +194,6 @@ class ReferenceGenome(Widget):
     headers = Dict().tag(sync=True)
     wholeGenomeView = Bool(default_value=True).tag(sync=True)
 
-    def add_track(self, track):
-        self.tracks = self.tracks[:] + [track]
-
-    def remove_track(self, track):
-        self.tracks = [t for t in self.tracks if t != track]
-
-
-
 
 # class SearchService(Widget):
 #     url = Unicode()

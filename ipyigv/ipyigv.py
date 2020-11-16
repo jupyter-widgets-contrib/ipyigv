@@ -10,7 +10,7 @@ from traitlets import (
 
 from traitlets.utils.bunch import Bunch
 
-from .options import ReferenceGenome
+from .options import ReferenceGenome, Track
 
 from .utils import widget_serialization_no_none
 
@@ -41,4 +41,15 @@ class IgvBrowser(widgets.DOMWidget):
     # Widget properties are defined as traitlets. Any property tagged with `sync=True`
     # is automatically synced to the frontend *any* time it changes in Python.
     # It is synced back to Python from the frontend *any* time the model is touched.
-    reference = InstanceDict(ReferenceGenome).tag(sync=True, **widget_serialization_no_none)
+    genome = InstanceDict(ReferenceGenome).tag(sync=True, **widget_serialization_no_none)
+    tracks = List(InstanceDict(Track)).tag(sync=True, **widget_serialization_no_none)
+
+    def add_track(self, track):
+        # List subscript does not work for enpty List, so handling this case manually.
+        if len(self.tracks) == 0:
+            self.tracks = [track]
+        else:
+            self.tracks = self.tracks[:] + [track]
+
+    def remove_track(self, track):
+        self.tracks = [t for t in self.tracks if t != track]
