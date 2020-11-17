@@ -55,6 +55,7 @@ export class IgvModel extends widgets.DOMWidgetModel {
 IgvModel.serializers = _.extend({
     genome: { deserialize: widgets.unpack_models },
     tracks: { deserialize: widgets.unpack_models },
+    roi: { deserialize: widgets.unpack_models },
   },
   widgets.DOMWidgetModel.serializers
 )
@@ -84,6 +85,11 @@ export class IgvBrowser extends widgets.DOMWidgetView {
         this.track_views.update(this.model.get('tracks'));
         this.tracks_initialized = true;
         console.log("Done configuring track_views");
+
+        this.roi_views = new widgets.ViewList(this.add_roi_view, this.remove_roi_view, this);
+        console.log("configuring roi_views");
+        this.roi_views.update(this.model.get('roi'));
+        console.log("Done configuring roi_views");
     }
 
     render() {
@@ -107,8 +113,9 @@ export class IgvBrowser extends widgets.DOMWidgetView {
       this.el.appendChild(this.igvDiv);
 
 
-      this.listenTo(this.model, 'change:genome', this.update_genome, this);
-      this.listenTo(this.model, 'change:tracks', this.update_tracks, this.reference);
+      this.listenTo(this.model, 'change:genome', this.update_genome);
+      this.listenTo(this.model, 'change:tracks', this.update_tracks);
+      this.listenTo(this.model, 'change:roi', this.update_roi);
 
     }
 
@@ -139,6 +146,7 @@ export class IgvBrowser extends widgets.DOMWidgetView {
               return this.browser.then((browser) => {
                   return browser.loadTrack(child_model.attributes).then((newTrack) => {
                       console.log("new track loaded in browser: " , newTrack);
+                      view.igvTrack = newTrack
                       return view;
                   });
             });
@@ -150,7 +158,7 @@ export class IgvBrowser extends widgets.DOMWidgetView {
     }
 
     remove_track_view (child_view) {
-      console.log('removing Track from genome', child_view);
+      console.log('removing Track from genome', child_view.igvTrack);
 
       if (!this.tracks_initialized) {
         console.log("track_view not yet initialized, skipping");
@@ -158,9 +166,47 @@ export class IgvBrowser extends widgets.DOMWidgetView {
       }
 
       this.browser.then(b => {
-          b.removeTrackByName(child_view.model.get("name"));
+          //b.removeTrackByName(child_view.model.get("name"));
+          if (childView.igvTrack){
+            b.removeTrack(childView.igvTrack);
+          }
+          else {
+            b.removeTrackByName(child_view.model.get("name"));
+          }
       });
     }
+
+    update_roi () {
+      console.log("update_roi")
+      var roi = this.model.get('roi');
+      console.log('Updating roi_views with ', roi);
+      // the browser lets us only add ROI (one or several), or delete all ROI. (no unitary delete)
+      if (roi == []) {
+        console.log('removing Regions of Interest');
+        this.browser.then(b => { b.clearROIs(); });
+      }
+      else {
+        this.roi_views.update(roi);
+      }
+    }
+
+    add_roi_view (child_model) {
+      return this.create_child_view(child_model, {}).then(view => {
+          console.log('add_roi_view with child view :', view);
+              return this.browser.then((browser) => {
+                  return browser.loadROI(view.model.attributes).then((newROI) => {
+                      console.log("new roi loaded in browser: " , newROI);
+                      return view;
+                  });
+            });
+      });
+    }
+
+    remove_all_roi_view (child_view) {
+      console.log('Oops - removing one Region of Interest not supported - Ignoring');
+    }
+
+
 
     track_removed (tracks) {
       console.log('track removed', tracks);

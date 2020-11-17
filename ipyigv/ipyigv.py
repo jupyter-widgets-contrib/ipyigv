@@ -10,7 +10,7 @@ from traitlets import (
 
 from traitlets.utils.bunch import Bunch
 
-from .options import ReferenceGenome, Track
+from .options import *
 
 from .utils import widget_serialization_no_none
 
@@ -44,6 +44,27 @@ class IgvBrowser(widgets.DOMWidget):
     genome = InstanceDict(ReferenceGenome).tag(sync=True, **widget_serialization_no_none)
     tracks = List(InstanceDict(Track)).tag(sync=True, **widget_serialization_no_none)
 
+    doubleClickDelay = Int(default_value=500).tag(sync=True)
+    flanking = Int(default_value=1000).tag(sync=True)
+    genomeList = Unicode(allow_none=True).tag(sync=True, **widget_serialization_no_none)  # optional URL
+    locus = (Unicode() | List(Unicode())).tag(sync=True, **widget_serialization_no_none)
+    minimumBases = Int(default_value=40).tag(sync=True)
+    queryParametersSupported = Bool(default=False).tag(sync=True)
+    search = Instance(SearchService, allow_none=True).tag(sync=True, **widget_serialization_no_none)
+    showAllChromosomes = Bool(default_value=True).tag(sync=True)
+    showAllChromosomeWidget = Bool(default_value=True).tag(sync=True)
+    showNavigation = Bool(default_value=True).tag(sync=True)
+    showSVGButton = Bool(default_value=False).tag(sync=True)
+    showRuler = Bool(default_value=True).tag(sync=True)
+    showCenterGuide = Bool(default_value=False).tag(sync=True)
+    # trackDefaults = # missing documentation
+    roi = List(InstanceDict(AnnotationTrack)).tag(sync=True, **widget_serialization_no_none) # regions of interest
+    oauthToken = Unicode(allow_none = True).tag(sync=True)
+    apiKey = Unicode(allow_none = True).tag(sync=True)
+    clientId = Unicode(allow_none = True).tag(sync=True)
+
+
+
     def add_track(self, track):
         # List subscript does not work for enpty List, so handling this case manually.
         if len(self.tracks) == 0:
@@ -53,3 +74,21 @@ class IgvBrowser(widgets.DOMWidget):
 
     def remove_track(self, track):
         self.tracks = [t for t in self.tracks if t != track]
+
+    def add_roi(self, roi):
+        # List subscript does not work for enpty List, so handling this case manually.
+        if len(self.roi) == 0:
+            self.roi = [roi]
+        else:
+            self.roi = self.roi[:] + [roi]
+
+    def remove_all_roi(self):
+        self.roi = []
+
+    # @validate('roi')
+    # def _valid_roi(self, roi):
+    #     if isinstance(roi, AnnotationTrack)):
+    #         return roi
+    #     else:
+    #         print("validating roi: type %s", type(roi))
+    #         raise TraitError("Regions of Interest must be of type AnnotationTrack")
