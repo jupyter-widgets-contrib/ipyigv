@@ -164,14 +164,14 @@ export class IgvBrowser extends widgets.DOMWidgetView {
         console.log("track_view not yet initialized, skipping");
         return;
       }
-
+      var child = child_view
       this.browser.then(b => {
           //b.removeTrackByName(child_view.model.get("name"));
-          if (childView.igvTrack){
-            b.removeTrack(childView.igvTrack);
+          if (child.igvTrack){
+            b.removeTrack(child.igvTrack);
           }
           else {
-            b.removeTrackByName(child_view.model.get("name"));
+            b.removeTrackByName(child.model.get("name"));
           }
       });
     }
