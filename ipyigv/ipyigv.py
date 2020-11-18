@@ -50,7 +50,7 @@ class IgvBrowser(widgets.DOMWidget):
     locus = (Unicode() | List(Unicode())).tag(sync=True, **widget_serialization_no_none)
     minimumBases = Int(default_value=40).tag(sync=True)
     queryParametersSupported = Bool(default=False).tag(sync=True)
-    search = Instance(SearchService, allow_none=True).tag(sync=True, **widget_serialization_no_none)
+    search = InstanceDict(SearchService, allow_none=True).tag(sync=True, **widget_serialization_no_none)
     showAllChromosomes = Bool(default_value=True).tag(sync=True)
     showAllChromosomeWidget = Bool(default_value=True).tag(sync=True)
     showNavigation = Bool(default_value=True).tag(sync=True)

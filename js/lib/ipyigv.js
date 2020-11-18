@@ -95,10 +95,60 @@ export class IgvBrowser extends widgets.DOMWidgetView {
     render() {
       super.render();
 
-      console.log("rendering browser");
       this.igvDiv = document.createElement("div");
       var referenceGenome = this.model.get('genome');
-      var options =  {reference: referenceGenome};
+      var tracks = this.model.get('tracks');
+      var roi = this.model.get('roi');
+      var doubleClickDelay = this.model.get('doubleClickDelay');
+      var flanking = this.model.get('flanking');
+      var genomeList = this.model.get('genomeList');
+      var locus = this.model.get('locus');
+      var minimumBases = this.model.get('minimumBases');
+      var queryParametersSupported = this.model.get('queryParametersSupported');
+      var search = this.model.get('search');
+      var showAllChromosomes = this.model.get('showAllChromosomes');
+      var showAllChromosomeWidget = this.model.get('showAllChromosomeWidget');
+      var showNavigation = this.model.get('showNavigation');
+      var showSVGButton = this.model.get('showSVGButton');
+      var showRuler = this.model.get('showRuler');
+      var showCenterGuide = this.model.get('showCenterGuide');
+      var oauthToken = this.model.get('oauthToken');
+      var apiKey = this.model.get('apiKey');
+      var clientId = this.model.get('clientId');
+
+
+      var options =  {
+          reference: referenceGenome,
+          tracks: tracks,
+          roi: roi,
+          doubleClickDelay: doubleClickDelay,
+          flanking: flanking,
+          genomeList: genomeList,
+          locus: locus,
+          minimumBases: minimumBases,
+          queryParametersSupported: queryParametersSupported,
+          showAllChromosomes:showAllChromosomes,
+          showAllChromosomeWidget: showAllChromosomeWidget,
+          showNavigation: showNavigation,
+          showSVGButton: showSVGButton,
+          showRuler: showRuler,
+          showCenterGuide: showCenterGuide,
+        };
+
+        if (search) {
+          options['search']=search
+        }
+        if (oauthToken) {
+          options['oauthToken']=oauthToken
+        }
+        if (apiKey) {
+          options['apiKey']=apiKey
+        }
+        if (clientId) {
+          options['clientId']=clientId
+        }
+
+      console.log("rendering browser", options);
       this.browser = igv.createBrowser(this.igvDiv, options)
         .then((browser) => {
             console.log("Created IGV browser with options ", options);

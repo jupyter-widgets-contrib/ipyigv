@@ -183,7 +183,7 @@ class AlignmentTrack(Track):
     samplingDepth = Int(100).tag(sync=True)
     alignmentRowHeight = Int(14).tag(sync=True)
     readgroup = Unicode("RG").tag(sync=True)
-    sortOption = InstanceDict(SortOption, allow_none=True).tag(sync=True, **widget_serialization_no_none)
+    sortOption = Instance(SortOption, allow_none=True).tag(sync=True, **widget_serialization_no_none)
     showSoftClips = Bool(False).tag(sync=True)
     showMismatches = Bool(True).tag(sync=True)
 
@@ -340,8 +340,8 @@ class ReferenceGenome(Widget):
     headers = Dict().tag(sync=True)
     wholeGenomeView = Bool(default_value=True).tag(sync=True)
 
-
-class SearchService(HasTraits):
+@register
+class SearchService(Widget):
     url = Unicode()
     resultsField = Unicode()
     coords = Int(default_value=1)
