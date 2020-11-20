@@ -24,6 +24,13 @@ PUBLIC_GENOMES = Bunch({v['id']: v for v in json.load(open(PUBLIC_GENOMES_FILE, 
 class IgvBrowser(widgets.DOMWidget):
     """An IGV browser widget."""
 
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.on_msg(self._custom_message_handler)
+
+    out=widgets.Output()
+
     # Name of the widget view class in front-end
     _view_name = Unicode('IgvBrowser').tag(sync=True)
     # Name of the widget model class in front-end
@@ -84,6 +91,21 @@ class IgvBrowser(widgets.DOMWidget):
 
     def remove_all_roi(self):
         self.roi = []
+
+    def dump_json(self):
+        print("round")
+        self.send({"type": "dump_json", "param": "param"})
+
+    @out.capture()
+    def _custom_message_handler(self, _, content, buffers):
+        print("got msg")
+        if content.get('event', '') == 'return_json':
+            self._return_json_handler(content, buffers)
+
+    @out.capture()
+    def _return_json_handler(self, content, buffers):
+        print("trip")
+
 
     # @validate('roi')
     # def _valid_roi(self, roi):

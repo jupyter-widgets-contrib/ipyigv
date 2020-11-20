@@ -50,6 +50,18 @@ export class IgvModel extends widgets.DOMWidgetModel {
           _view_module_version : '0.1.0',
       });
     };
+
+    initialize(attributes, options) {
+      super.initialize(attributes, options);
+      this.on("msg:custom", this.custom_message_handler);
+    };
+
+    custom_message_handler(msg) {
+      console.log('custom_message_handler in model', msg);
+      if (msg.type === 'dump_json') {
+        this.trigger('return_json', {test:'OK'});
+      };
+    };
 };
 
 IgvModel.serializers = _.extend({
@@ -89,7 +101,7 @@ export class IgvBrowser extends widgets.DOMWidgetView {
         this.roi_views = new widgets.ViewList(this.add_roi_view, this.remove_roi_view, this);
         console.log("configuring roi_views");
         this.roi_views.update(this.model.get('roi'));
-        console.log("Done configuring roi_views");
+        console.log("Done configuring roi_views")
     }
 
     render() {
@@ -166,6 +178,7 @@ export class IgvBrowser extends widgets.DOMWidgetView {
       this.listenTo(this.model, 'change:genome', this.update_genome);
       this.listenTo(this.model, 'change:tracks', this.update_tracks);
       this.listenTo(this.model, 'change:roi', this.update_roi);
+      this.listenTo(this.model, "return_json", this._return_json);
 
     }
 
@@ -273,6 +286,12 @@ export class IgvBrowser extends widgets.DOMWidgetView {
     track_clicked (track, popoverData) {
       console.log('track clicked', track, popoverData);
     }
+
+    _return_json(event) {
+      console.log('_return_json in view', event)
+      this.send({ event: 'return_json'})
+    }
+
 }
 
 // module.exports = {
