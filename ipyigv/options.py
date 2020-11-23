@@ -267,7 +267,7 @@ class SpliceJunctionsTrack(Track):
 
 
 @register
-class GwassTrack (Track):
+class GwasTrack (Track):
     type = Unicode('gwas', read_only=True).tag(sync=True)
     min = Int(0).tag(sync=True)
     max = Int(25).tag(sync=True)
