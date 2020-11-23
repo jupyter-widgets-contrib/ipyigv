@@ -92,19 +92,22 @@ class IgvBrowser(widgets.DOMWidget):
     def remove_all_roi(self):
         self.roi = []
 
+    def search(self, symbol):
+        print("search")
+        self.send({"type": "search", "symbol": symbol})
+
     def dump_json(self):
-        print("round")
-        self.send({"type": "dump_json", "param": "param"})
+        print("Dumping browser configuration to browser.out")
+        self.send({"type": "dump_json"})
 
     @out.capture()
     def _custom_message_handler(self, _, content, buffers):
-        print("got msg")
         if content.get('event', '') == 'return_json':
-            self._return_json_handler(content, buffers)
+            self._return_json_handler(content)
 
     @out.capture()
-    def _return_json_handler(self, content, buffers):
-        print("trip")
+    def _return_json_handler(self, content):
+        print (content['json'])
 
 
     # @validate('roi')

@@ -59,8 +59,12 @@ export class IgvModel extends widgets.DOMWidgetModel {
     custom_message_handler(msg) {
       console.log('custom_message_handler in model', msg);
       if (msg.type === 'dump_json') {
-        this.trigger('return_json', {test:'OK'});
-      };
+        this.trigger('return_json');
+      }
+      else if (msg.type === 'search') {
+        var symbol = msg.symbol
+        this.trigger('search', symbol);
+      }
     };
 };
 
@@ -179,6 +183,7 @@ export class IgvBrowser extends widgets.DOMWidgetView {
       this.listenTo(this.model, 'change:tracks', this.update_tracks);
       this.listenTo(this.model, 'change:roi', this.update_roi);
       this.listenTo(this.model, "return_json", this._return_json);
+      this.listenTo(this.model, "search", this._search);
 
     }
 
@@ -288,9 +293,22 @@ export class IgvBrowser extends widgets.DOMWidgetView {
     }
 
     _return_json(event) {
-      console.log('_return_json in view', event)
-      this.send({ event: 'return_json'})
+      console.log('view._return_json', event);
+      this.browser.then((browser)=> {
+        var json = browser.toJSON()
+        this.send({ event: 'return_json', json:json});
+
+      });
     }
+
+    _search(symbol) {
+      console.log('view._search', symbol);
+      var symbol = symbol
+      this.browser.then((browser) => {
+        browser.search(symbol);
+      });
+    }
+
 
 }
 
