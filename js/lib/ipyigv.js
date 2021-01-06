@@ -2,6 +2,9 @@ const widgets = require('@jupyter-widgets/base');
 var _ = require('lodash');
 var igv = require('./igv.js')
 
+// Import the CSS
+import '../css/widget.css';
+
 // When serialiazing the entire widget state for embedding, only values that
 // differ from the defaults will be specified.
 
@@ -203,7 +206,7 @@ export class IgvBrowser extends widgets.DOMWidgetView {
         this.track_views.update(tracks);
       }
       else {
-        console.log ("tracks not yet initialized - skipping");
+        console.log ("Tracks not yet initialized - skipping");
       }
     }
 
@@ -273,8 +276,6 @@ export class IgvBrowser extends widgets.DOMWidgetView {
     remove_all_roi_view (child_view) {
       console.log('Oops - removing one Region of Interest not supported - Ignoring');
     }
-
-
 
     track_removed (tracks) {
       console.log('track removed', tracks);
