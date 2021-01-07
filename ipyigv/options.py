@@ -7,12 +7,12 @@ from traitlets import (
     Float, Unicode, Int, Tuple, List, Instance, Bool, Dict, Enum,
     link, observe, default, validate, TraitError, Union, HasTraits, TraitType
 )
-
 from ipywidgets import Widget, register, widget_serialization
 from ipywidgets.widgets.trait_types import Color, InstanceDict
 from ipywidgets.widgets import widget
 
 from .utils import widget_serialization_no_none
+from ._version import EXTENSION_VERSION
 
 
 # NB '.txt' considered annotation as it is used in the public genomes. But not as per the doc.
@@ -69,9 +69,9 @@ class Track(Widget):
     # Name of the front-end module containing widget model
     _model_module = Unicode('ipyigv').tag(sync=True)
     # Version of the front-end module containing widget view
-    _view_module_version = Unicode('^0.1.0').tag(sync=True)
+    _view_module_version = Unicode(EXTENSION_VERSION).tag(sync=True)
     # Version of the front-end module containing widget model
-    _model_module_version = Unicode('^0.1.0').tag(sync=True)
+    _model_module_version = Unicode(EXTENSION_VERSION).tag(sync=True)
 
 
     def __new__(cls, **kwargs):
@@ -348,9 +348,9 @@ class ReferenceGenome(Widget):
     # Name of the front-end module containing widget model
     _model_module = Unicode('ipyigv').tag(sync=True)
     # Version of the front-end module containing widget view
-    _view_module_version = Unicode('^0.1.0').tag(sync=True)
+    _view_module_version = Unicode(EXTENSION_VERSION).tag(sync=True)
     # Version of the front-end module containing widget model
-    _model_module_version = Unicode('^0.1.0').tag(sync=True)
+    _model_module_version = Unicode(EXTENSION_VERSION).tag(sync=True)
 
     id = Unicode(allow_none=True).tag(sync=True)
     name = Unicode(allow_none=True).tag(sync=True)

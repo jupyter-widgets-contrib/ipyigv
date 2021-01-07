@@ -3,7 +3,9 @@ var _ = require('lodash');
 var igv = require('./igv.js')
 
 // Import the CSS
-import '../css/widget.css';
+import '../css/widget.css'
+
+import { MODULE_NAME, MODULE_VERSION } from './version'
 
 // When serialiazing the entire widget state for embedding, only values that
 // differ from the defaults will be specified.
@@ -14,10 +16,10 @@ export class TrackModel extends widgets.WidgetModel {
       return _.extend(super.defaults(),  {
             _model_name : 'TrackModel',
             _view_name : 'TrackView',
-            _model_module : 'ipyigv',
-            _view_module : 'ipyigv',
-            _model_module_version : '0.1.0',
-            _view_module_version : '0.1.0',
+            _model_module : MODULE_NAME,
+            _view_module : MODULE_NAME,
+            _model_module_version : MODULE_VERSION,
+            _view_module_version : MODULE_VERSION,
         });
     };
   };
@@ -28,10 +30,10 @@ export class ReferenceGenomeModel extends widgets.WidgetModel {
       return _.extend(super.defaults(),  {
         _model_name : 'ReferenceGenomeModel',
         _view_name : 'ReferenceGenomeView',
-        _model_module : 'ipyigv',
-        _view_module : 'ipyigv',
-        _model_module_version : '0.1.0',
-        _view_module_version : '0.1.0',
+        _model_module : MODULE_NAME,
+        _view_module : MODULE_NAME,
+        _model_module_version : MODULE_VERSION,
+        _view_module_version : MODULE_VERSION,
       });
     };
 };
@@ -47,10 +49,10 @@ export class IgvModel extends widgets.DOMWidgetModel {
       return _.extend(super.defaults(),  {
           _model_name : 'IgvModel',
           _view_name : 'IgvBrowser',
-          _model_module : 'ipyigv',
-          _view_module : 'ipyigv',
-          _model_module_version : '0.1.0',
-          _view_module_version : '0.1.0',
+          _model_module : MODULE_NAME,
+          _view_module : MODULE_NAME,
+          _model_module_version : MODULE_VERSION,
+          _view_module_version : MODULE_VERSION,
       });
     };
 

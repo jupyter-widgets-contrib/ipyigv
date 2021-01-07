@@ -13,7 +13,7 @@ from traitlets.utils.bunch import Bunch
 from .options import *
 
 from .utils import widget_serialization_no_none
-
+from ._version import EXTENSION_VERSION
 
 PUBLIC_GENOMES_FILE = 'public_genomes.json'
 PUBLIC_GENOMES = Bunch({v['id']: v for v in json.load(open(PUBLIC_GENOMES_FILE, 'r')) } )
@@ -39,9 +39,9 @@ class IgvBrowser(widgets.DOMWidget):
     # Name of the front-end module containing widget model
     _model_module = Unicode('ipyigv').tag(sync=True)
     # Version of the front-end module containing widget view
-    _view_module_version = Unicode('^0.1.0').tag(sync=True)
+    _view_module_version = Unicode(EXTENSION_VERSION).tag(sync=True)
     # Version of the front-end module containing widget model
-    _model_module_version = Unicode('^0.1.0').tag(sync=True)
+    _model_module_version = Unicode(EXTENSION_VERSION).tag(sync=True)
 
     # Widget specific property.
     # Widget properties are defined as traitlets. Any property tagged with `sync=True`
