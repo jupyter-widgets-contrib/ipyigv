@@ -52,6 +52,9 @@ setup_args = dict(
         'ipywidgets>=7.0.0',
         'spectate'
     ],
+    extras_require={
+        "test": ["pytest>4.6"]
+    },
     packages=find_packages(),
     zip_safe=False,
     cmdclass=cmdclass,
