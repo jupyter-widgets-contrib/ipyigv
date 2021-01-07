@@ -1,10 +1,8 @@
-ipyigv
-===============================
+# ipyigv
 
 A Jupyter wrapper for the igv.js library
 
-Installation
-------------
+## Installation
 
 To install use pip:
 
@@ -28,7 +26,9 @@ To install for jupyterlab <=2
     jupyter lab build
 
 
-For a development installation (requires npm),
+### For a development installation (requires npm),
+
+    mamba install nodejs jupyterlab -c conda-forge
 
     git clone https://github.com//ipyigv.git
     cd ipyigv
@@ -37,7 +37,6 @@ For a development installation (requires npm),
     jupyter nbextension enable --py --sys-prefix ipyigv
     jupyter labextension install js
 
-    mamba install nodejs jupyterlab -c conda-forge
 
 When actively developing your extension, build Jupyter Lab with the command:
 
