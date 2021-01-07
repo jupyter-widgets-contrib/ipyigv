@@ -51,6 +51,9 @@ setup_args = dict(
     install_requires=[
         'ipywidgets>=7.0.0',
     ],
+    extras_require={
+        "test": ["pytest>4.6"]
+    },
     packages=find_packages(),
     zip_safe=False,
     cmdclass=cmdclass,
