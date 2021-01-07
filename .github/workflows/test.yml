@@ -61,6 +61,6 @@ jobs:
         cat labextensions | grep "jupyter-ipyigv.*OK"
         python -m jupyterlab.browser_check
 
-    - name: Run Tests
-      shell: bash -l {0}
+    # - name: Run Tests
+    #   shell: bash -l {0}
       # run: pytest . --color=yes
