@@ -52,7 +52,7 @@ jobs:
 
     - name: Install ipyigv
       shell: bash -l {0}
-      run: pip install -e .
+      run: pip install -e ".[test]"
 
     - name: Check labextension
       shell: bash -l {0}
