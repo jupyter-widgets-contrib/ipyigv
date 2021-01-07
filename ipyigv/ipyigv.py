@@ -13,8 +13,7 @@ from traitlets.utils.bunch import Bunch
 from .options import *
 
 from .utils import widget_serialization_no_none
-
-# See js/lib/example.js for the frontend counterpart to this file.
+from ._version import EXTENSION_VERSION
 
 PUBLIC_GENOMES_FILE = 'public_genomes.json'
 PUBLIC_GENOMES = Bunch({v['id']: v for v in json.load(open(PUBLIC_GENOMES_FILE, 'r')) } )
@@ -29,7 +28,7 @@ class IgvBrowser(widgets.DOMWidget):
         super().__init__(**kwargs)
         self.on_msg(self._custom_message_handler)
 
-    out=widgets.Output()
+    out = widgets.Output()
 
     # Name of the widget view class in front-end
     _view_name = Unicode('IgvBrowser').tag(sync=True)
@@ -40,9 +39,9 @@ class IgvBrowser(widgets.DOMWidget):
     # Name of the front-end module containing widget model
     _model_module = Unicode('ipyigv').tag(sync=True)
     # Version of the front-end module containing widget view
-    _view_module_version = Unicode('^0.1.0').tag(sync=True)
+    _view_module_version = Unicode(EXTENSION_VERSION).tag(sync=True)
     # Version of the front-end module containing widget model
-    _model_module_version = Unicode('^0.1.0').tag(sync=True)
+    _model_module_version = Unicode(EXTENSION_VERSION).tag(sync=True)
 
     # Widget specific property.
     # Widget properties are defined as traitlets. Any property tagged with `sync=True`
@@ -50,7 +49,6 @@ class IgvBrowser(widgets.DOMWidget):
     # It is synced back to Python from the frontend *any* time the model is touched.
     genome = InstanceDict(ReferenceGenome).tag(sync=True, **widget_serialization_no_none)
     tracks = List(InstanceDict(Track)).tag(sync=True, **widget_serialization_no_none)
-
     doubleClickDelay = Int(default_value=500).tag(sync=True)
     flanking = Int(default_value=1000).tag(sync=True)
     genomeList = Unicode(allow_none=True).tag(sync=True, **widget_serialization_no_none)  # optional URL
@@ -70,10 +68,8 @@ class IgvBrowser(widgets.DOMWidget):
     apiKey = Unicode(allow_none = True).tag(sync=True)
     clientId = Unicode(allow_none = True).tag(sync=True)
 
-
-
     def add_track(self, track):
-        # List subscript does not work for enpty List, so handling this case manually.
+        # List subscript does not work for empty List, so handling this case manually.
         if len(self.tracks) == 0:
             self.tracks = [track]
         else:
@@ -83,7 +79,7 @@ class IgvBrowser(widgets.DOMWidget):
         self.tracks = [t for t in self.tracks if t != track]
 
     def add_roi(self, roi):
-        # List subscript does not work for enpty List, so handling this case manually.
+        # List subscript does not work for empty List, so handling this case manually.
         if len(self.roi) == 0:
             self.roi = [roi]
         else:
@@ -93,8 +89,8 @@ class IgvBrowser(widgets.DOMWidget):
         self.roi = []
 
     def search(self, symbol):
-        print("search")
         self.send({"type": "search", "symbol": symbol})
+        print("Search completed. Check the widget instance for results.")
 
     def dump_json(self):
         print("Dumping browser configuration to browser.out")

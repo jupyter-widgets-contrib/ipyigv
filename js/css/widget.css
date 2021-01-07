@@ -1,0 +1,5 @@
+.igv-track {
+  min-height: 250px;
+  width: 100%;
+  resize: both;
+}
