@@ -15,7 +15,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: [3.6, 3.7, 3.8]
+        python-version: [3.7, 3.8]
 
     steps:
     - name: Checkout
@@ -52,7 +52,7 @@ jobs:
 
     - name: Install ipyigv
       shell: bash -l {0}
-      run: pip install -e .
+      run: pip install -e ".[test]"
 
     - name: Check labextension
       shell: bash -l {0}
@@ -61,6 +61,6 @@ jobs:
         cat labextensions | grep "jupyter-ipyigv.*OK"
         python -m jupyterlab.browser_check
 
-    - name: Run Tests
-      shell: bash -l {0}
-      run: pytest . --color=yes
+    # - name: Run Tests
+    #   shell: bash -l {0}
+      # run: pytest . --color=yes
