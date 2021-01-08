@@ -4,6 +4,8 @@ dist/
 build/
 *.py[cod]
 node_modules/
+js/package.json
+js/package-lock.json
 
 # Compiled javascript
 ipyigv/static/
