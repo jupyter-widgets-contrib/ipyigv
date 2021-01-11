@@ -67,6 +67,7 @@ setup_args = dict(
         'jupyter',
         'widgets',
     ],
+    package_data={'ipyigv': ['public_genomes.json']},
     classifiers=[
         'Development Status :: 4 - Beta',
         'Framework :: IPython',
