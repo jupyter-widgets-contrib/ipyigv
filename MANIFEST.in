@@ -49,4 +49,4 @@ global-exclude .git
 global-exclude .ipynb_checkpoints
 
 # Data files
-include public_genomes.json
+include ipyigv/public_genomes.json
