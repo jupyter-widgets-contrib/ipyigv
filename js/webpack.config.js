@@ -20,7 +20,21 @@ module.exports = [
             rules: rules
         },
     },
-    {// jupyter-leaflet bundle for unpkg
+    {// jupyter-ipyigv bundle for the classic notebook
+        entry: './src/notebook.js',
+        output: {
+            filename: 'index.js',
+            path: path.resolve(__dirname, '..', 'ipyleaflet', 'nbextension'),
+            libraryTarget: 'amd',
+            publicPath: '',
+        },
+        devtool: 'source-map',
+        module: {
+            rules: rules
+        },
+        externals: ['@jupyter-widgets/base'],
+    },
+    {// jupyter-ipyigv bundle for unpkg
         entry: './src/embed.js',
         output: {
             filename: 'index.js',
