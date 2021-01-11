@@ -3,7 +3,7 @@
   "version": "0.1.6",
   "description": "A Jupyter wrapper for the igv.js library",
   "author": "Project Jupyter",
-  "main": "lib/index.js",
+  "main": "src/index.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/QuantStack/ipyigv"

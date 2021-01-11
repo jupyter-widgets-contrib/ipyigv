@@ -24,7 +24,7 @@ module.exports = [
         entry: './src/notebook.js',
         output: {
             filename: 'index.js',
-            path: path.resolve(__dirname, '..', 'ipyleaflet', 'nbextension'),
+            path: path.resolve(__dirname, '..', 'ipyigv', 'nbextension'),
             libraryTarget: 'amd',
             publicPath: '',
         },
