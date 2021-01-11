@@ -15,7 +15,7 @@ from .options import *
 from .utils import widget_serialization_no_none
 from ._version import EXTENSION_VERSION
 
-PUBLIC_GENOMES_FILE = 'public_genomes.json'
+PUBLIC_GENOMES_FILE = os.path.join(os.path.dirname(__file__), 'public_genomes.json')
 PUBLIC_GENOMES = Bunch({v['id']: v for v in json.load(open(PUBLIC_GENOMES_FILE, 'r')) } )
 
 
