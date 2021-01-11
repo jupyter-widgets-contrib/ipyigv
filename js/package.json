@@ -24,7 +24,7 @@
   "scripts": {
     "clean": "rimraf dist/",
     "prepublish": "webpack",
-    "build": "webpack && npm run build:labextension",
+    "build": "webpack && yarn run build:labextension",
     "build:labextension": "jupyter labextension build .",
     "watch": "webpack --watch --mode=development",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -36,7 +36,6 @@
   "devDependencies": {
     "@jupyterlab/builder": "^3.0.0",
     "css-loader": "^5.0.1",
-    "npm": "^6.14.5",
     "rimraf": "^2.6.1",
     "style-loader": "^2.0.0",
     "webpack": "^4.44.2",
