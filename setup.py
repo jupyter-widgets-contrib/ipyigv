@@ -33,8 +33,9 @@ jstargets = [
 ]
 
 data_files_spec = [
-    ('share/jupyter/nbextensions/ipyigv', 'ipyigv/static', '*.*'),
-    ('etc/jupyter/nbconfig/notebook.d', '.', 'ipyigv.json'),
+    ('share/jupyter/nbextensions/jupyter-ipyigv', 'ipyigv/nbextension', '*.*'),
+    ('share/jupyter/labextensions/jupyter-ipyigv', 'ipyigv/labextension', '**'),
+    ('etc/jupyter/nbconfig/notebook.d', '.', 'jupyter-ipyigv.json'),
 ]
 
 cmdclass = create_cmdclass('jsdeps', data_files_spec=data_files_spec)
@@ -50,7 +51,7 @@ setup_args = dict(
     long_description=LONG_DESCRIPTION,
     include_package_data=True,
     install_requires=[
-        'ipywidgets>=7.0.0',
+        'ipywidgets>=7.6.0,<8',
         'spectate'
     ],
     extras_require={
@@ -61,12 +62,13 @@ setup_args = dict(
     cmdclass=cmdclass,
     author='Project Jupyter',
     author_email='jeandavid.harrouet@hopsys.com',
-    url='https://github.com//ipyigv',
+    url='https://github.com/QuantStack/ipyigv',
     keywords=[
         'ipython',
         'jupyter',
         'widgets',
     ],
+    package_data={'ipyigv': ['public_genomes.json']},
     classifiers=[
         'Development Status :: 4 - Beta',
         'Framework :: IPython',

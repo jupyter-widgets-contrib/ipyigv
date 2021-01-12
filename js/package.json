@@ -3,7 +3,7 @@
   "version": "0.1.6",
   "description": "A Jupyter wrapper for the igv.js library",
   "author": "Project Jupyter",
-  "main": "lib/index.js",
+  "main": "src/index.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/QuantStack/ipyigv"
@@ -20,10 +20,12 @@
     "css/*.css",
     "dist/*.js"
   ],
+  "main": "src/index.js",
   "scripts": {
     "clean": "rimraf dist/",
     "prepublish": "webpack",
-    "build": "webpack",
+    "build": "webpack && yarn run build:labextension",
+    "build:labextension": "jupyter labextension build .",
     "watch": "webpack --watch --mode=development",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -34,13 +36,19 @@
   "devDependencies": {
     "@jupyterlab/builder": "^3.0.0",
     "css-loader": "^5.0.1",
-    "npm": "^6.14.5",
     "rimraf": "^2.6.1",
     "style-loader": "^2.0.0",
     "webpack": "^4.44.2",
     "webpack-cli": "^3.1.2"
   },
   "jupyterlab": {
-    "extension": "src/labplugin"
+    "extension": "src/labplugin",
+    "outputDir": "../ipyigv/labextension",
+    "sharedPackages": {
+      "@jupyter-widgets/base": {
+        "bundled": false,
+        "singleton": true
+      }
+    }
   }
 }
