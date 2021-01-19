@@ -2,7 +2,6 @@ import os
 
 from urllib.parse import urlparse
 
-from spectate import mvc
 from traitlets import (
     Float, Unicode, Int, Tuple, List, Instance, Bool, Dict, Enum,
     link, observe, default, validate, TraitError, Union, HasTraits, TraitType
