@@ -1,6 +1,6 @@
 - To release a new version of ipyigv on PyPI:
 
-* To release a new version is recommended to build ts dependencies with jpm.
+* To release a new version is recommended to build ts dependencies with yarn.
 
 * Make sure to update the `pyproject.toml` with any new dependencies you include in this package.
 
@@ -25,6 +25,6 @@ Update `js/package.json` with new npm package version
 ```
 # clean out the `dist` and `node_modules` directories
 git clean -fdx
-jpm install
-jpm publish
+yarn install
+yarn publish
 ```
