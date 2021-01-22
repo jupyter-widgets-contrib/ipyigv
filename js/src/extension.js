@@ -7,7 +7,7 @@ if (window.require) {
     window.require.config({
         map: {
             "*" : {
-                "jupyter-ipyigv": "nbextensions/jupyter-ipyigv/index",
+                "jupyter-igv": "nbextensions/jupyter-igv/index",
             }
         }
     });

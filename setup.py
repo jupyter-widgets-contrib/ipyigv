@@ -33,9 +33,9 @@ jstargets = [
 ]
 
 data_files_spec = [
-    ('share/jupyter/nbextensions/jupyter-ipyigv', 'ipyigv/nbextension', '*.*'),
-    ('share/jupyter/labextensions/jupyter-ipyigv', 'ipyigv/labextension', '**'),
-    ('etc/jupyter/nbconfig/notebook.d', '.', 'jupyter-ipyigv.json'),
+    ('share/jupyter/nbextensions/jupyter-igv', 'ipyigv/nbextension', '*.*'),
+    ('share/jupyter/labextensions/jupyter-igv', 'ipyigv/labextension', '**'),
+    ('etc/jupyter/nbconfig/notebook.d', '.', 'jupyter-igv.json'),
 ]
 
 cmdclass = create_cmdclass('jsdeps', data_files_spec=data_files_spec)

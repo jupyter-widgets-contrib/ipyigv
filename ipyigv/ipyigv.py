@@ -35,9 +35,9 @@ class IgvBrowser(widgets.DOMWidget):
     # Name of the widget model class in front-end
     _model_name = Unicode('IgvModel').tag(sync=True)
     # Name of the front-end module containing widget view
-    _view_module = Unicode('ipyigv').tag(sync=True)
+    _view_module = Unicode('jupyter-igv').tag(sync=True)
     # Name of the front-end module containing widget model
-    _model_module = Unicode('ipyigv').tag(sync=True)
+    _model_module = Unicode('jupyter-igv').tag(sync=True)
     # Version of the front-end module containing widget view
     _view_module_version = Unicode(EXTENSION_VERSION).tag(sync=True)
     # Version of the front-end module containing widget model
@@ -104,7 +104,6 @@ class IgvBrowser(widgets.DOMWidget):
     @out.capture()
     def _return_json_handler(self, content):
         print (content['json'])
-
 
     # @validate('roi')
     # def _valid_roi(self, roi):

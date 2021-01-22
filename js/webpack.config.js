@@ -20,7 +20,7 @@ module.exports = [
             rules: rules
         },
     },
-    {// jupyter-ipyigv bundle for the classic notebook
+    {// jupyter-igv bundle for the classic notebook
         entry: './src/notebook.js',
         output: {
             filename: 'index.js',
@@ -34,7 +34,7 @@ module.exports = [
         },
         externals: ['@jupyter-widgets/base'],
     },
-    {// jupyter-ipyigv bundle for unpkg
+    {// jupyter-igv bundle for unpkg
         entry: './src/embed.js',
         output: {
             filename: 'index.js',
