@@ -1,6 +1,6 @@
 {
   "name": "jupyter-igv",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "description": "A Jupyter wrapper for the igv.js library",
   "author": "Project Jupyter",
   "main": "src/index.js",
