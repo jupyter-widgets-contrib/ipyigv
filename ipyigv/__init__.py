@@ -22,6 +22,6 @@ def _jupyter_nbextension_paths():
     return [{
         'section': 'notebook',
         'src': 'static',
-        'dest': 'ipyigv',
-        'require': 'ipyigv/extension'
+        'dest': 'jupyter-igv',
+        'require': 'jupyter-igv/extension'
     }]

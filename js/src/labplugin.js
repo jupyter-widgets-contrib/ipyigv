@@ -2,11 +2,11 @@ var plugin = require('./index');
 var base = require('@jupyter-widgets/base');
 
 module.exports = {
-  id: 'ipyigv',
+  id: 'jupyter-igv',
   requires: [base.IJupyterWidgetRegistry],
   activate: function(app, widgets) {
       widgets.registerWidget({
-          name: 'ipyigv',
+          name: 'jupyter-igv',
           version: plugin.version,
           exports: plugin
       });

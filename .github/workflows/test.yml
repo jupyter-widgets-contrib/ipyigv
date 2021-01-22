@@ -42,11 +42,11 @@ jobs:
     - name: Check installation files
       shell: bash -l {0}
       run: |
-        test -d $CONDA_PREFIX/share/jupyter/nbextensions/jupyter-ipyigv
-        test -f $CONDA_PREFIX/share/jupyter/nbextensions/jupyter-ipyigv/extension.js
-        test -f $CONDA_PREFIX/share/jupyter/nbextensions/jupyter-ipyigv/index.js
-        test -d $CONDA_PREFIX/share/jupyter/labextensions/jupyter-ipyigv
-        test -f $CONDA_PREFIX/share/jupyter/labextensions/jupyter-ipyigv/package.json
+        test -d $CONDA_PREFIX/share/jupyter/nbextensions/jupyter-igv
+        test -f $CONDA_PREFIX/share/jupyter/nbextensions/jupyter-igv/extension.js
+        test -f $CONDA_PREFIX/share/jupyter/nbextensions/jupyter-igv/index.js
+        test -d $CONDA_PREFIX/share/jupyter/labextensions/jupyter-igv
+        test -f $CONDA_PREFIX/share/jupyter/labextensions/jupyter-igv/package.json
 
     - name: Import check
       shell: bash -l {0}

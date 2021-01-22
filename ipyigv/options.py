@@ -64,9 +64,9 @@ class Track(Widget):
     # Name of the widget model class in front-end
     _model_name = Unicode('TrackModel').tag(sync=True)
     # Name of the front-end module containing widget view
-    _view_module = Unicode('ipyigv').tag(sync=True)
+    _view_module = Unicode('jupyter-igv').tag(sync=True)
     # Name of the front-end module containing widget model
-    _model_module = Unicode('ipyigv').tag(sync=True)
+    _model_module = Unicode('jupyter-igv').tag(sync=True)
     # Version of the front-end module containing widget view
     _view_module_version = Unicode(EXTENSION_VERSION).tag(sync=True)
     # Version of the front-end module containing widget model
@@ -343,9 +343,9 @@ class ReferenceGenome(Widget):
     # Name of the widget model class in front-end
     _model_name = Unicode('ReferenceGenomeModel').tag(sync=True)
     # Name of the front-end module containing widget view
-    _view_module = Unicode('ipyigv').tag(sync=True)
+    _view_module = Unicode('jupyter-igv').tag(sync=True)
     # Name of the front-end module containing widget model
-    _model_module = Unicode('ipyigv').tag(sync=True)
+    _model_module = Unicode('jupyter-igv').tag(sync=True)
     # Version of the front-end module containing widget view
     _view_module_version = Unicode(EXTENSION_VERSION).tag(sync=True)
     # Version of the front-end module containing widget model
