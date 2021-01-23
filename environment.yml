@@ -1,0 +1,5 @@
+name: ipyigv
+channels:
+  - conda-forge
+dependencies:
+  - ipyigv

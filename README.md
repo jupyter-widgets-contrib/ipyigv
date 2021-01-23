@@ -1,5 +1,7 @@
 # ipyigv
 
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/QuantStack/ipyigv/stable?filepath=notebooks/ipyigv.ipynb)
+
 A Jupyter wrapper for the igv.js library
 
 ## Installation
