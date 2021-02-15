@@ -137,7 +137,8 @@ export class IgvBrowser extends widgets.DOMWidgetView {
       var apiKey = this.model.get('apiKey');
       var clientId = this.model.get('clientId');
 
-
+      console.log("modified browser")
+      
       var options =  {
           reference: referenceGenome,
           tracks: tracks,
@@ -156,18 +157,18 @@ export class IgvBrowser extends widgets.DOMWidgetView {
           showCenterGuide: showCenterGuide,
         };
 
-        if (search) {
-          options['search']=search
-        }
-        if (oauthToken) {
-          options['oauthToken']=oauthToken
-        }
-        if (apiKey) {
-          options['apiKey']=apiKey
-        }
-        if (clientId) {
-          options['clientId']=clientId
-        }
+      if (search) {
+        options['search']=search
+      }
+      if (oauthToken) {
+        options['oauthToken']=oauthToken
+      }
+      if (apiKey) {
+        options['apiKey']=apiKey
+      }
+      if (clientId) {
+        options['clientId']=clientId
+      }
 
       console.log("rendering browser", options);
       this.browser = igv.createBrowser(this.igvDiv, options)
@@ -314,12 +315,3 @@ export class IgvBrowser extends widgets.DOMWidgetView {
 
 
 }
-
-// module.exports = {
-//     IgvModel: IgvModel,
-//     IgvBrowser: IgvBrowser,
-//     ReferenceGenomeView: ReferenceGenomeView,
-//     ReferenceGenomeModel: ReferenceGenomeModel,
-//     TrackView: TrackView,
-//     TrackModel: TrackModel,
-// };

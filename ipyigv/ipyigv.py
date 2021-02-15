@@ -47,7 +47,7 @@ class IgvBrowser(widgets.DOMWidget):
     # Widget properties are defined as traitlets. Any property tagged with `sync=True`
     # is automatically synced to the frontend *any* time it changes in Python.
     # It is synced back to Python from the frontend *any* time the model is touched.
-    genome = InstanceDict(ReferenceGenome).tag(sync=True, **widget_serialization_no_none)
+    genome = InstanceDict(ReferenceGenome).tag(sync=True, **widget_serialization)
     tracks = List(InstanceDict(Track)).tag(sync=True, **widget_serialization_no_none)
     doubleClickDelay = Int(default_value=500).tag(sync=True)
     flanking = Int(default_value=1000).tag(sync=True)
