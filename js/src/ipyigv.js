@@ -137,10 +137,21 @@ export class IgvBrowser extends widgets.DOMWidgetView {
       var apiKey = this.model.get('apiKey');
       var clientId = this.model.get('clientId');
 
-      console.log("modified browser")
-      
+      console.log("reducing genome...");
+
+      // remove null / empty values in the genome, so optional items are not included -- better for igv.js
+      var reducedGenome = Object.keys(referenceGenome.attributes)
+        .filter(k => referenceGenome.attributes[k] != null
+                      && referenceGenome.attributes[k] != ""
+                      && referenceGenome.attributes[k] != []
+                      && referenceGenome.attributes[k] != {}
+                    )
+        .reduce((a, k) => ({ ...a, [k]: referenceGenome.attributes[k] }), {});
+
+      console.log("reducedGenome", reducedGenome)
+
       var options =  {
-          reference: referenceGenome,
+          reference: reducedGenome,
           tracks: tracks,
           roi: roi,
           doubleClickDelay: doubleClickDelay,
