@@ -2,7 +2,7 @@
   "name": "jupyter-igv",
   "version": "0.1.9",
   "description": "A Jupyter wrapper for the igv.js library",
-  "author": "Project Jupyter",
+  "author": "QuantStack",
   "main": "src/index.js",
   "repository": {
     "type": "git",
@@ -37,8 +37,8 @@
     "css-loader": "^5.0.1",
     "rimraf": "^2.6.1",
     "style-loader": "^2.0.0",
-    "webpack": "^4.44.2",
-    "webpack-cli": "^3.1.2"
+    "webpack": "^5",
+    "webpack-cli": "^4.5.0"
   },
   "jupyterlab": {
     "extension": "src/labplugin",
