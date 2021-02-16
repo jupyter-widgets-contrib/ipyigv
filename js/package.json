@@ -30,6 +30,7 @@
   },
   "dependencies": {
     "@jupyter-widgets/base": "^2 || ^3 || ^4.0.0",
+    "igv": "^2.7.5",
     "lodash": "^4.17.4"
   },
   "devDependencies": {
