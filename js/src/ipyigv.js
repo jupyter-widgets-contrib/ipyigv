@@ -2,14 +2,9 @@ const widgets = require('@jupyter-widgets/base');
 var _ = require('lodash');
 var igv = require('./igv.js')
 
-// Import the CSS
 import '../css/widget.css'
 
 import { MODULE_NAME, MODULE_VERSION } from './version'
-
-// When serialiazing the entire widget state for embedding, only values that
-// differ from the defaults will be specified.
-
 
 export class TrackModel extends widgets.WidgetModel {
   defaults () {
@@ -95,7 +90,6 @@ export class TrackView extends widgets.WidgetView {
   }
 }
 
-
 export class IgvBrowser extends widgets.DOMWidgetView {
     initialize(options) {
         super.initialize(options);
@@ -116,7 +110,6 @@ export class IgvBrowser extends widgets.DOMWidgetView {
     render() {
       super.render();
 
-      this.igvDiv = document.createElement("div");
       var referenceGenome = this.model.get('genome');
       var tracks = this.model.get('tracks');
       var roi = this.model.get('roi');
@@ -136,7 +129,6 @@ export class IgvBrowser extends widgets.DOMWidgetView {
       var oauthToken = this.model.get('oauthToken');
       var apiKey = this.model.get('apiKey');
       var clientId = this.model.get('clientId');
-
 
       var options =  {
           reference: referenceGenome,
@@ -170,7 +162,7 @@ export class IgvBrowser extends widgets.DOMWidgetView {
         }
 
       console.log("rendering browser", options);
-      this.browser = igv.createBrowser(this.igvDiv, options)
+      this.browser = igv.createBrowser(this.el, options)
         .then((browser) => {
             console.log("Created IGV browser with options ", options);
             browser.on('trackremoved', this.track_removed);
@@ -180,9 +172,6 @@ export class IgvBrowser extends widgets.DOMWidgetView {
             browser.on('trackclick', this.track_clicked);
             return browser;
           });
-
-      this.el.appendChild(this.igvDiv);
-
 
       this.listenTo(this.model, 'change:genome', this.update_genome);
       this.listenTo(this.model, 'change:tracks', this.update_tracks);
@@ -311,15 +300,4 @@ export class IgvBrowser extends widgets.DOMWidgetView {
         browser.search(symbol);
       });
     }
-
-
 }
-
-// module.exports = {
-//     IgvModel: IgvModel,
-//     IgvBrowser: IgvBrowser,
-//     ReferenceGenomeView: ReferenceGenomeView,
-//     ReferenceGenomeModel: ReferenceGenomeModel,
-//     TrackView: TrackView,
-//     TrackModel: TrackModel,
-// };
