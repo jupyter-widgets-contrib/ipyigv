@@ -357,7 +357,7 @@ class ReferenceGenome(Widget):
     indexURL = Unicode(allow_none=True).tag(sync=True)
     cytobandURL = Unicode(allow_none=True).tag(sync=True)
     aliasURL = Unicode(allow_none=True).tag(sync=True)
-    indexed = Bool(default_value=False).tag(sync=True)
+    indexed = Bool(allow_none=True, default_value=None).tag(sync=True)
     tracks = List(InstanceDict(Track)).tag(sync=True, **widget_serialization_no_none)
     chromosomeOrder = Unicode(allow_none=True).tag(sync=True)
     headers = Dict().tag(sync=True)

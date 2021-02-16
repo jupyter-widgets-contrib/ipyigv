@@ -7,10 +7,6 @@ import '../css/widget.css'
 
 import { MODULE_NAME, MODULE_VERSION } from './version'
 
-// When serialiazing the entire widget state for embedding, only values that
-// differ from the defaults will be specified.
-
-
 export class TrackModel extends widgets.WidgetModel {
   defaults () {
       return _.extend(super.defaults(),  {
@@ -21,6 +17,21 @@ export class TrackModel extends widgets.WidgetModel {
             _model_module_version : MODULE_VERSION,
             _view_module_version : MODULE_VERSION,
         });
+    };
+
+    // returns a dictionary representing a track which igv.js can take in its configuration
+    to_dict(include_empty = false) {
+      let keys = Object.keys(this.attributes).filter(k => !k.startsWith("_"))
+                  // removing empty values unless specified otherwise
+                  .filter(k=> (include_empty || !([null, undefined, ""].includes(this.get(k)))));
+
+      var dict = keys.reduce((result, key)=> ({...result, [key]:this.get(key)}), {});
+
+      if (keys.includes('roi')) {
+        dict['roi'] = dict['roi'].map(track => track.to_dict(include_empty));
+      };
+      console.log ("Finished generating dictionary from TrackModel", dict);
+      return dict ;
     };
   };
 
@@ -35,6 +46,23 @@ export class ReferenceGenomeModel extends widgets.WidgetModel {
         _model_module_version : MODULE_VERSION,
         _view_module_version : MODULE_VERSION,
       });
+    };
+
+    // returns a dictionary representing a genome which igv.js can take in its configuration
+    to_dict(include_empty = false) {
+      let keys = Object.keys(this.attributes).filter(k => !k.startsWith("_"))
+                  // removing empty values unless specified otherwise
+                  .filter(k=> (include_empty || !([null, undefined, ""].includes(this.get(k)))));
+
+      var dict = keys.reduce((result, key)=> ({...result, [key]:this.get(key)}), {});
+
+      // special treatment for tracks
+      if (keys.includes('tracks')) {
+        let tracks = dict['tracks'];
+        dict['tracks'] = tracks.map(track=> track.to_dict(include_empty));
+      };
+      console.log ("Finished generating dictionary from ReferenceGenomeView", dict);
+      return dict ;
     };
 };
 
@@ -70,6 +98,39 @@ export class IgvModel extends widgets.DOMWidgetModel {
         var symbol = msg.symbol
         this.trigger('search', symbol);
       }
+    };
+
+    // returns a dictionary representing a genome which igv.js can take in its configuration
+    to_dict(include_empty = false) {
+      var keys = Object.keys(this.attributes).filter(k => !k.startsWith("_"))
+                  // removing the layout attribute -- not related to igv
+                  .filter(k=> (k!='layout'))
+                  // removing empty values unless specified otherwise
+                  .filter(k=> (include_empty || !([null, undefined, ""].includes(this.get(k)))));
+
+      var dict = keys.reduce((result, key)=> ({...result, [key]:this.get(key)}), {});
+
+      // special treatment for tracks
+      if (keys.includes('tracks')) {
+        let tracks = dict['tracks'];
+        dict['tracks'] = tracks.map(track=> track.to_dict(include_empty));
+      };
+
+      // special treatment for regions of interest
+      if (keys.includes('roi')) {
+        let roi = dict['roi'];
+        dict['roi'] = roi.map(roi=> roi.to_dict(include_empty));
+      };
+
+
+      // special treatment for genome
+      if (keys.includes('genome')) {  // should always be the case
+        let genome = dict['genome'];
+        dict['genome'] = genome.to_dict(include_empty);
+      };
+
+      console.log ("Finished generating dictionary from IgvModel", dict);
+      return dict ;
     };
 };
 
@@ -117,70 +178,8 @@ export class IgvBrowser extends widgets.DOMWidgetView {
       super.render();
 
       this.igvDiv = document.createElement("div");
-      var referenceGenome = this.model.get('genome');
-      var tracks = this.model.get('tracks');
-      var roi = this.model.get('roi');
-      var doubleClickDelay = this.model.get('doubleClickDelay');
-      var flanking = this.model.get('flanking');
-      var genomeList = this.model.get('genomeList');
-      var locus = this.model.get('locus');
-      var minimumBases = this.model.get('minimumBases');
-      var queryParametersSupported = this.model.get('queryParametersSupported');
-      var search = this.model.get('search');
-      var showAllChromosomes = this.model.get('showAllChromosomes');
-      var showAllChromosomeWidget = this.model.get('showAllChromosomeWidget');
-      var showNavigation = this.model.get('showNavigation');
-      var showSVGButton = this.model.get('showSVGButton');
-      var showRuler = this.model.get('showRuler');
-      var showCenterGuide = this.model.get('showCenterGuide');
-      var oauthToken = this.model.get('oauthToken');
-      var apiKey = this.model.get('apiKey');
-      var clientId = this.model.get('clientId');
 
-      console.log("reducing genome...");
-
-      // remove null / empty values in the genome, so optional items are not included -- better for igv.js
-      var reducedGenome = Object.keys(referenceGenome.attributes)
-        .filter(k => referenceGenome.attributes[k] != null
-                      && referenceGenome.attributes[k] != ""
-                      && referenceGenome.attributes[k] != []
-                      && referenceGenome.attributes[k] != {}
-                    )
-        .reduce((a, k) => ({ ...a, [k]: referenceGenome.attributes[k] }), {});
-
-      console.log("reducedGenome", reducedGenome)
-
-      var options =  {
-          reference: reducedGenome,
-          tracks: tracks,
-          roi: roi,
-          doubleClickDelay: doubleClickDelay,
-          flanking: flanking,
-          genomeList: genomeList,
-          locus: locus,
-          minimumBases: minimumBases,
-          queryParametersSupported: queryParametersSupported,
-          showAllChromosomes:showAllChromosomes,
-          showAllChromosomeWidget: showAllChromosomeWidget,
-          showNavigation: showNavigation,
-          showSVGButton: showSVGButton,
-          showRuler: showRuler,
-          showCenterGuide: showCenterGuide,
-        };
-
-      if (search) {
-        options['search']=search
-      }
-      if (oauthToken) {
-        options['oauthToken']=oauthToken
-      }
-      if (apiKey) {
-        options['apiKey']=apiKey
-      }
-      if (clientId) {
-        options['clientId']=clientId
-      }
-
+      var options = this.model.to_dict()
       console.log("rendering browser", options);
       this.browser = igv.createBrowser(this.igvDiv, options)
         .then((browser) => {
