@@ -1,37 +1,36 @@
-const widgets = require('@jupyter-widgets/base');
-var _ = require('lodash');
-var igv = require('./igv.js')
+import * as widgets from '@jupyter-widgets/base';
+import * as _ from 'lodash';
+import igv from 'igv/dist/igv.js';
+import '../css/widget.css';
 
-import '../css/widget.css'
-
-import { MODULE_NAME, MODULE_VERSION } from './version'
+import { MODULE_NAME, MODULE_VERSION } from './version';
 
 export class TrackModel extends widgets.WidgetModel {
   defaults () {
-      return _.extend(super.defaults(),  {
-            _model_name : 'TrackModel',
-            _view_name : 'TrackView',
-            _model_module : MODULE_NAME,
-            _view_module : MODULE_NAME,
-            _model_module_version : MODULE_VERSION,
-            _view_module_version : MODULE_VERSION,
-        });
-    };
+    return _.extend(super.defaults(),  {
+      _model_name : 'TrackModel',
+      _view_name : 'TrackView',
+      _model_module : MODULE_NAME,
+      _view_module : MODULE_NAME,
+      _model_module_version : MODULE_VERSION,
+      _view_module_version : MODULE_VERSION,
+    });
   };
-
+};
 
 export class ReferenceGenomeModel extends widgets.WidgetModel {
   defaults () {
-      return _.extend(super.defaults(),  {
-        _model_name : 'ReferenceGenomeModel',
-        _view_name : 'ReferenceGenomeView',
-        _model_module : MODULE_NAME,
-        _view_module : MODULE_NAME,
-        _model_module_version : MODULE_VERSION,
-        _view_module_version : MODULE_VERSION,
-      });
-    };
+    return _.extend(super.defaults(),  {
+      _model_name : 'ReferenceGenomeModel',
+      _view_name : 'ReferenceGenomeView',
+      _model_module : MODULE_NAME,
+      _view_module : MODULE_NAME,
+      _model_module_version : MODULE_VERSION,
+      _view_module_version : MODULE_VERSION,
+    });
+  };
 };
+
 
 ReferenceGenomeModel.serializers = _.extend({
   tracks: { deserialize: widgets.unpack_models }
