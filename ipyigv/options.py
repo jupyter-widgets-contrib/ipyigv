@@ -2,32 +2,29 @@ import os
 
 from urllib.parse import urlparse
 
-from traitlets import (
-    Float, Unicode, Int, Tuple, List, Instance, Bool, Dict, Enum,
-    link, observe, default, validate, TraitError, Union, HasTraits, TraitType
-)
+from traitlets import Float, Unicode, Int, List, Instance, Bool, Dict, HasTraits
+
 from ipywidgets import Widget, register, widget_serialization
 from ipywidgets.widgets.trait_types import Color, InstanceDict
 from ipywidgets.widgets import widget
 
-from .utils import widget_serialization_no_none
 from ._version import EXTENSION_VERSION
 
 
 # NB '.txt' considered annotation as it is used in the public genomes. But not as per the doc.
-TRACK_FILE_TYPES = { \
-        'annotation': [ '.txt', \
-            '.bed', '.gff', '.gff3', '.gtf', '.genePred', '.genePredExt', \
-            '.peaks', '.narrowPeak', '.broadPeak', '.bigBed', '.bedpe' \
-            ],
-        'wig': ['.wig', '.bigWig', '.bedGraph'],
-        'alignment': ['.bam'],
-        'variant': ['.vcf'],
-        'seg': ['.seg'],
-        'spliceJunctions': ['.bed'],
-        'gwas': ['.gwas', '.bed'],
-        'interaction': ['.bedpe'],
-        }
+TRACK_FILE_TYPES = {
+  'annotation': [
+    '.txt', '.bed', '.gff', '.gff3', '.gtf', '.genePred', '.genePredExt',
+    '.peaks', '.narrowPeak', '.broadPeak', '.bigBed', '.bedpe'
+  ],
+  'wig': ['.wig', '.bigWig', '.bedGraph'],
+  'alignment': ['.bam'],
+  'variant': ['.vcf'],
+  'seg': ['.seg'],
+  'spliceJunctions': ['.bed'],
+  'gwas': ['.gwas', '.bed'],
+  'interaction': ['.bedpe'],
+}
 
 
 class FieldColors(HasTraits):
@@ -36,16 +33,16 @@ class FieldColors(HasTraits):
 
 
 class SortOption(HasTraits):
-    chr = Unicode() # chromosone name
-    position = Int() # genomic position
-    option = Unicode() # 'BASE', 'STRAND', 'INSERT_SIZE', 'MATE_CHR', 'MQ', 'TAG'
-    tag = Unicode () # doc not clear
-    direction = Unicode("ASC") # 'ASC' for ascending, 'DESC' for descending
+    chr = Unicode()  # chromosone name
+    position = Int()  # genomic position
+    option = Unicode()  # 'BASE', 'STRAND', 'INSERT_SIZE', 'MATE_CHR', 'MQ', 'TAG'
+    tag = Unicode ()  # doc not clear
+    direction = Unicode("ASC")  # 'ASC' for ascending, 'DESC' for descending
 
 
 class SortOrder(HasTraits):
     chr = Unicode()  # chromosone name
-    direction = Unicode("ASC") # 'ASC' for ascending, 'DESC' for descending
+    direction = Unicode("ASC")  # 'ASC' for ascending, 'DESC' for descending
     start = Int()
     end = Int()
 
@@ -59,19 +56,12 @@ class Track(Widget):
     If a Track type is not inferable a generic Track will be instantiated.
     """
 
-    # Name of the widget view class in front-end
     _view_name = Unicode('TrackView').tag(sync=True)
-    # Name of the widget model class in front-end
     _model_name = Unicode('TrackModel').tag(sync=True)
-    # Name of the front-end module containing widget view
     _view_module = Unicode('jupyter-igv').tag(sync=True)
-    # Name of the front-end module containing widget model
     _model_module = Unicode('jupyter-igv').tag(sync=True)
-    # Version of the front-end module containing widget view
     _view_module_version = Unicode(EXTENSION_VERSION).tag(sync=True)
-    # Version of the front-end module containing widget model
     _model_module_version = Unicode(EXTENSION_VERSION).tag(sync=True)
-
 
     def __new__(cls, **kwargs):
         if cls is Track:
@@ -82,7 +72,7 @@ class Track(Widget):
                 url = kwargs.get('url')
                 path = urlparse(url).path
                 filename, filetype = os.path.splitext(path)
-                if filetype == '.gz': # some files might be compressed
+                if filetype == '.gz':  # some files might be compressed
                     innerfilename, innerfiletype = os.path.splitext(filename)
                     filetype = innerfiletype
                 for k, v in TRACK_FILE_TYPES.items():
@@ -112,7 +102,7 @@ class Track(Widget):
 
     # These fields are common to all Track types
     sourceType = Unicode(default_value='file').tag(sync=True)  #
-    format = Unicode().tag(sync=True) # missing documentation
+    format = Unicode().tag(sync=True)  # missing documentation
     name = Unicode().tag(sync=True)
     url = Unicode().tag(sync=True)
     indexURL = Unicode().tag(sync=True)
@@ -143,11 +133,11 @@ class AnnotationTrack(Track):
     nameField = Unicode(default_value = 'Name').tag(sync=True)
     maxRows = Int (default_value = 500).tag(sync=True)
     searchable = Bool(default_value=False).tag(sync=True)
-    filterTypes = List(Unicode, default_value=['chromosone', 'gene']).tag(sync=True, **widget_serialization_no_none)
+    filterTypes = List(Unicode, default_value=['chromosone', 'gene']).tag(sync=True, **widget_serialization)
     color = Color("rgb(0,0,150)").tag(sync=True)
     altColor = Color("rgb(0,0,150)").tag(sync=True)
-    colorBy = Instance(FieldColors, allow_none=True).tag(sync=True, **widget_serialization_no_none)
-    roi = List(InstanceDict(Track)).tag(sync=True, **widget_serialization_no_none) # regions of interest
+    colorBy = Instance(FieldColors, allow_none=True).tag(sync=True, **widget_serialization)
+    roi = List(InstanceDict(Track)).tag(sync=True, **widget_serialization)  # regions of interest
 
 
 @register
@@ -160,31 +150,31 @@ class AlignmentTrack(Track):
     type = Unicode('alignment', read_only=True).tag(sync=True)
     viewAsPairs = Bool(default_value=False).tag(sync=True)
     pairsSupported = Bool(default_value=True).tag(sync=True)
-    coverageColor = Color(default_value="rgb(150, 150, 150)").tag(sync=True, **widget_serialization) # default: rgb(150, 150, 150)
-    color = Color(default_value="rgb(170, 170, 170)").tag(sync=True, **widget_serialization) # default: rgb(170, 170, 170)
+    coverageColor = Color(default_value="rgb(150, 150, 150)").tag(sync=True, **widget_serialization)  # default: rgb(150, 150, 150)
+    color = Color(default_value="rgb(170, 170, 170)").tag(sync=True, **widget_serialization)  # default: rgb(170, 170, 170)
     deletionColor = Color(default_value="black").tag(sync=True, **widget_serialization)
-    skippedColor = Color(default_value="rgb(150, 170, 170)").tag(sync=True, **widget_serialization) # default: rgb(150, 170, 170)
-    insertionColor = Color(default_value="rgb(138, 94, 161)").tag(sync=True, **widget_serialization) # default: rgb(138, 94, 161)
-    negStrandColor = Color(default_value="rgba(150, 150, 230, 0.75)").tag(sync=True, **widget_serialization) # default: rgba(150, 150, 230, 0.75)
-    posStrandColor = Color(default_value="rgba(230, 150, 150, 0.75)").tag(sync=True, **widget_serialization) # default: rgb(138, 94, 161)
-    # pairConnectorColor = Instance(Color, default_value="alignmentColor") # default: doc not clear
-    colorBy = Unicode("none").tag(sync=True) # "none", "strand", "firstOfPairStrand", or "tag"
-    colorByTag = Unicode().tag(sync=True) # TODO - doc not clear
-    bamColorTag = Unicode("YC").tag(sync=True) # TODO - doc not clear
+    skippedColor = Color(default_value="rgb(150, 170, 170)").tag(sync=True, **widget_serialization)  # default: rgb(150, 170, 170)
+    insertionColor = Color(default_value="rgb(138, 94, 161)").tag(sync=True, **widget_serialization)  # default: rgb(138, 94, 161)
+    negStrandColor = Color(default_value="rgba(150, 150, 230, 0.75)").tag(sync=True, **widget_serialization)  # default: rgba(150, 150, 230, 0.75)
+    posStrandColor = Color(default_value="rgba(230, 150, 150, 0.75)").tag(sync=True, **widget_serialization)  # default: rgb(138, 94, 161)
+    # pairConnectorColor = Instance(Color, default_value="alignmentColor")  # default: doc not clear
+    colorBy = Unicode("none").tag(sync=True)  # "none", "strand", "firstOfPairStrand", or "tag"
+    colorByTag = Unicode().tag(sync=True)  # TODO - doc not clear
+    bamColorTag = Unicode("YC").tag(sync=True)  # TODO - doc not clear
     samplingWindowSize = Int(100).tag(sync=True)
     samplingDepth = Int(100).tag(sync=True)
     alignmentRowHeight = Int(14).tag(sync=True)
     readgroup = Unicode("RG").tag(sync=True)
-    sortOption = Instance(SortOption, allow_none=True).tag(sync=True, **widget_serialization_no_none)
+    sortOption = Instance(SortOption, allow_none=True).tag(sync=True, **widget_serialization)
     showSoftClips = Bool(False).tag(sync=True)
     showMismatches = Bool(True).tag(sync=True)
 
     # Paired-end and mate-pair coloring options.
-    pairOrientation  = Unicode(allow_none=True).tag(sync=True, **widget_serialization_no_none)  #  ff, fr, or rf
-    minFragmentLength = Int(allow_none=True).tag(sync=True, **widget_serialization_no_none)
-    maxFragmentLength = Int(allow_none=True).tag(sync=True, **widget_serialization_no_none)
+    pairOrientation  = Unicode(allow_none=True).tag(sync=True, **widget_serialization)  #  ff, fr, or rf
+    minFragmentLength = Int(allow_none=True).tag(sync=True, **widget_serialization)
+    maxFragmentLength = Int(allow_none=True).tag(sync=True, **widget_serialization)
 
-    roi = List(InstanceDict(Track)).tag(sync=True, **widget_serialization_no_none) # regions of interest
+    roi = List(InstanceDict(Track)).tag(sync=True, **widget_serialization) # regions of interest
 
 
 @register
@@ -203,7 +193,7 @@ class VariantTrack(Track):
     squishedCallHeight = Int(1).tag(sync=True)
     expandedCallHeight = Int(10).tag(sync=True)
 
-    roi = List(InstanceDict(Track)).tag(sync=True, **widget_serialization_no_none) # regions of interest
+    roi = List(InstanceDict(Track)).tag(sync=True, **widget_serialization)  # regions of interest
 
 
 class Guideline(HasTraits):
@@ -221,14 +211,14 @@ class WigTrack(Track):
 
     type = Unicode('wig', read_only=True).tag(sync=True)
     autoscale = Bool(True).tag(sync=True)
-    autoscaleGroup = Unicode(allow_none=True).tag(sync=True, **widget_serialization_no_none)
+    autoscaleGroup = Unicode(allow_none=True).tag(sync=True, **widget_serialization)
     min = Int(0).tag(sync=True)
-    max = Int(allow_none=True).tag(sync=True, **widget_serialization_no_none)
+    max = Int(allow_none=True).tag(sync=True, **widget_serialization)
     color = Color(default_value="rgb(150, 150, 150)").tag(sync=True)
-    altColor = Color(allow_none=True).tag(sync=True, **widget_serialization_no_none)
-    guideLines = List(trait=Instance(Guideline), allow_none=True).tag(sync=True, **widget_serialization_no_none)
+    altColor = Color(allow_none=True).tag(sync=True, **widget_serialization)
+    guideLines = List(trait=Instance(Guideline), allow_none=True).tag(sync=True, **widget_serialization)
 
-    roi = List(InstanceDict(Track)).tag(sync=True, **widget_serialization_no_none) # regions of interest
+    roi = List(InstanceDict(Track)).tag(sync=True, **widget_serialization)  # regions of interest
 
 
 @register
@@ -239,11 +229,11 @@ class SegTrack(Track):
     """
 
     type = Unicode('seg', read_only=True).tag(sync=True)
-    isLog = Bool(allow_none=True).tag(sync=True, **widget_serialization_no_none)
-    displayMode = Unicode("EXPANDED").tag(sync=True) #  "EXPANDED", "SQUISHED", or "FILL"
+    isLog = Bool(allow_none=True).tag(sync=True, **widget_serialization)
+    displayMode = Unicode("EXPANDED").tag(sync=True)  #  "EXPANDED", "SQUISHED", or "FILL"
     sort = InstanceDict(SortOrder).tag(sync=True, **widget_serialization)
 
-    roi = List(InstanceDict(Track)).tag(sync=True, **widget_serialization_no_none) # regions of interest
+    roi = List(InstanceDict(Track)).tag(sync=True, **widget_serialization)  # regions of interest
 
 
 @register
@@ -255,27 +245,27 @@ class SpliceJunctionsTrack(Track):
 
     type = Unicode('spliceJunctions', read_only=True).tag(sync=True)
     # Display Options
-    colorBy = Unicode('numUniqueReads').tag(sync=True) # "numUniqueReads", "numReads", "isAnnotatedJunction", "strand", "motif"
+    colorBy = Unicode('numUniqueReads').tag(sync=True)  # "numUniqueReads", "numReads", "isAnnotatedJunction", "strand", "motif"
     colorByNumReadsThreshold = Int(5).tag(sync=True)
-    thicknessBasedOn = Unicode('numUniqueReads').tag(sync=True) # "numUniqueReads", "numReads", "isAnnotatedJunction"
-    bounceHeightBasedOn = Unicode('random').tag(sync=True) # "random", "distance", "thickness"
+    thicknessBasedOn = Unicode('numUniqueReads').tag(sync=True)  # "numUniqueReads", "numReads", "isAnnotatedJunction"
+    bounceHeightBasedOn = Unicode('random').tag(sync=True)  # "random", "distance", "thickness"
     labelUniqueReadCount = Bool(True).tag(sync=True)
     labelMultiMappedReadCount = Bool(True).tag(sync=True)
     labelTotalReadCount = Bool(False).tag(sync=True)
     labelMotif = Bool(False).tag(sync=True)
-    labelAnnotatedJunction = Unicode(allow_none=True).tag(sync=True, **widget_serialization_no_none)
+    labelAnnotatedJunction = Unicode(allow_none=True).tag(sync=True, **widget_serialization)
 
     # Filtering Options
     minUniquelyMappedReads = Int(0).tag(sync=True)
     minTotalReads = Int(0).tag(sync=True)
     maxFractionMultiMappedReads = Int(1).tag(sync=True)
     minSplicedAlignmentOverhang = Int(0).tag(sync=True)
-    hideStrand = Unicode(allow_none=True).tag(sync=True, **widget_serialization_no_none) # None, "+" or "-"
+    hideStrand = Unicode(allow_none=True).tag(sync=True, **widget_serialization)  # None, "+" or "-"
     hideAnnotatedJunctions = Bool(False).tag(sync=True)
     hideUnannotatedJunctions = Bool(False).tag(sync=True)
     hideMotifs = List(Unicode).tag(sync=True, **widget_serialization)
 
-    roi = List(InstanceDict(Track)).tag(sync=True, **widget_serialization_no_none) # regions of interest
+    roi = List(InstanceDict(Track)).tag(sync=True, **widget_serialization)  # regions of interest
 
 
 @register
@@ -288,12 +278,12 @@ class GwasTrack (Track):
     type = Unicode('gwas', read_only=True).tag(sync=True)
     min = Int(0).tag(sync=True)
     max = Int(25).tag(sync=True)
-    # format = Unicode().tag(sync=True) #  'bed' or 'gwas' - format is already in Track -> validation only
+    # format = Unicode().tag(sync=True)  # 'bed' or 'gwas' - format is already in Track -> validation only
     posteriorProbability = Bool(False).tag(sync=True)
     dotSize = Int(3).tag(sync=True)
-    columns = Dict(key_trait=Unicode, value_trait=Int, allow_none=True).tag(sync=True, **widget_serialization_no_none)
+    columns = Dict(key_trait=Unicode, value_trait=Int, allow_none=True).tag(sync=True, **widget_serialization)
 
-    roi = List(InstanceDict(Track)).tag(sync=True, **widget_serialization_no_none) # regions of interest
+    roi = List(InstanceDict(Track)).tag(sync=True, **widget_serialization)  # regions of interest
 
 
 @register
@@ -307,7 +297,7 @@ class InteractionTrack (Track):
     arcOrientation = Bool(True).tag(sync=True)
     thickness = Int(2).tag(sync=True)
 
-    roi = List(InstanceDict(Track)).tag(sync=True, **widget_serialization_no_none) # regions of interest
+    roi = List(InstanceDict(Track)).tag(sync=True, **widget_serialization)  # regions of interest
 
 
 class Exon(HasTraits):
@@ -338,17 +328,11 @@ class ReferenceGenome(Widget):
     https://github.com/igvteam/igv.js/wiki/Reference-Genome
     """
 
-    # Name of the widget view class in front-end
     _view_name = Unicode('ReferenceGenomeView').tag(sync=True)
-    # Name of the widget model class in front-end
     _model_name = Unicode('ReferenceGenomeModel').tag(sync=True)
-    # Name of the front-end module containing widget view
     _view_module = Unicode('jupyter-igv').tag(sync=True)
-    # Name of the front-end module containing widget model
     _model_module = Unicode('jupyter-igv').tag(sync=True)
-    # Version of the front-end module containing widget view
     _view_module_version = Unicode(EXTENSION_VERSION).tag(sync=True)
-    # Version of the front-end module containing widget model
     _model_module_version = Unicode(EXTENSION_VERSION).tag(sync=True)
 
     id = Unicode(allow_none=True).tag(sync=True)
@@ -358,7 +342,7 @@ class ReferenceGenome(Widget):
     cytobandURL = Unicode(allow_none=True).tag(sync=True)
     aliasURL = Unicode(allow_none=True).tag(sync=True)
     indexed = Bool(default_value=False).tag(sync=True)
-    tracks = List(InstanceDict(Track)).tag(sync=True, **widget_serialization_no_none)
+    tracks = List(InstanceDict(Track)).tag(sync=True, **widget_serialization)
     chromosomeOrder = Unicode(allow_none=True).tag(sync=True)
     headers = Dict().tag(sync=True)
     wholeGenomeView = Bool(default_value=True).tag(sync=True)
